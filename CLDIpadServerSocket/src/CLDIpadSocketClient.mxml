@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					   xmlns:s="library://ns.adobe.com/flex/spark" 
+					   xmlns:mx="library://ns.adobe.com/flex/mx"  layout="{vlayout}">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+		<s:VerticalLayout id="vlayout">
+			
+		</s:VerticalLayout>
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			
+			protected function btn_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				init(event);
+			}
+			private var socket:Socket;
+			private var g:Graphics;
+			private function init(e:Event):void
+			{
+				
+				try
+				{
+					socket=new Socket();
+					//socket.addEventListener(ServerSocketConnectEvent.CONNECT,connect);
+					socket.addEventListener(Event.CONNECT,connect);
+					socket.addEventListener(ProgressEvent.SOCKET_DATA,dataHandler);
+					socket.connect(ip.text,int(port.text));
+					
+					
+				}catch(e1:Error)
+				{
+					btn.label=e1.message;
+				}
+				
+			}
+			private function connect(e:Event):void
+			{
+				btn.label="已连接";
+			}
+			private function dataHandler(e:ProgressEvent):void
+			{
+				txt.text=(socket.readUTFBytes(socket.bytesAvailable));
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:HGroup id="hv">
+		<s:Label text="ip"/>
+		<s:TextInput id="ip" text="127.0.0.1"/>
+		<s:Label text="端口"/>
+		<s:TextInput id="port" text="3000"/>
+		<s:Button label="开启连接" id="btn" click="btn_clickHandler(event)"/>
+		<s:Label text="监听状态"/>
+		<mx:Text text="未监听" id="jstate"/>
+	</s:HGroup>
+	<s:TextArea id="txt" width="100%" height="100%">
+		
+	</s:TextArea>
+</s:WindowedApplication>

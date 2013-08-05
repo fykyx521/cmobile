@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<flexLibProperties includeAllClasses="false" useMultiPlatformConfig="false" version="3">
+  <includeClasses>
+    <classEntry path="fr.mazerte.controls.openflow.OpenFlow"/>
+    <classEntry path="fr.mazerte.controls.openflow.core.OpenFlowBase"/>
+    <classEntry path="fr.mazerte.controls.openflow.env.EnvEvent"/>
+    <classEntry path="fr.mazerte.controls.openflow.env.FlashEnv"/>
+    <classEntry path="fr.mazerte.controls.openflow.env.IEnv"/>
+    <classEntry path="fr.mazerte.controls.openflow.env.PapervisionEnv"/>
+    <classEntry path="fr.mazerte.controls.openflow.error.EnvError"/>
+    <classEntry path="fr.mazerte.controls.openflow.events.SeekEvent"/>
+    <classEntry path="fr.mazerte.controls.openflow.interpolator.BlurInterpolator"/>
+    <classEntry path="fr.mazerte.controls.openflow.interpolator.DefaultInterpolator"/>
+    <classEntry path="fr.mazerte.controls.openflow.interpolator.FogInterpolator"/>
+    <classEntry path="fr.mazerte.controls.openflow.interpolator.IInterpolator"/>
+    <classEntry path="fr.mazerte.controls.openflow.itemRenderer.ColorItemRenderer"/>
+    <classEntry path="fr.mazerte.controls.openflow.itemRenderer.DefaultItemRenderer"/>
+    <classEntry path="fr.mazerte.controls.openflow.itemRenderer.IItemRenderer"/>
+    <classEntry path="fr.mazerte.controls.openflow.layout.AppleHorizontalLayout"/>
+    <classEntry path="fr.mazerte.controls.openflow.layout.AppleVerticalLayout"/>
+    <classEntry path="fr.mazerte.controls.openflow.layout.CercularLayout"/>
+    <classEntry path="fr.mazerte.controls.openflow.layout.CircleInLayout"/>
+    <classEntry path="fr.mazerte.controls.openflow.layout.CircleOutLayout"/>
+    <classEntry path="fr.mazerte.controls.openflow.layout.DefaultLayout"/>
+    <classEntry path="fr.mazerte.controls.openflow.layout.ILayout"/>
+    <classEntry path="fr.mazerte.controls.openflow.layout.PowerLayout"/>
+    <classEntry path="fr.mazerte.controls.openflow.seek.DefaultSeeker"/>
+    <classEntry path="fr.mazerte.controls.openflow.seek.ISeeker"/>
+    <classEntry path="fr.mazerte.controls.openflow.utils.AbstractMatrix3D"/>
+    <classEntry path="fr.mazerte.controls.openflow.utils.EnvUtils"/>
+    <classEntry path="fr.mazerte.controls.openflow.utils.eaze.PropertyTransform3D"/>
+    <classEntry path="fr.mazerte.controls.openflow.utils.eaze.transform3D.Flash3DAdapter"/>
+    <classEntry path="fr.mazerte.controls.openflow.utils.eaze.transform3D.PapervisionAdapter"/>
+    <classEntry path="fr.mazerte.controls.openflow.utils.ArrayUtil"/>
+  </includeClasses>
+  <includeResources/>
+  <namespaceManifests/>
+</flexLibProperties>

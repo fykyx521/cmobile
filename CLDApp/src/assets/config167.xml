@@ -1,0 +1,85 @@
+<config>
+	<data ip="127.0.0.1" port="3000" debug="true" ajaxURL="../AjaxServer.aspx"></data>
+	<font load="true">FontMsyh.swf</font>
+	<contenturl>http://192.168.68.167/dyh/DataServer/AjaxPreView.aspx</contenturl>
+	<produceurl>http://192.168.68.167/dyh/DataServer/AjaxForFlashTouch.aspx</produceurl>
+	<produceweburl>http://192.168.68.167/dyh/DataServer/AjaxForWap.aspx</produceweburl>
+	<baseurl>http://192.168.68.167/dyh/</baseurl>
+	<crossdomain>
+		<url>http://192.168.68.167/crossdomain.xml</url>
+		<!--url>http://192.168.68.167/szmapdata/crossdomain.xml</url -->
+
+	</crossdomain>
+	<proceduces>
+		<proceduce name="uiconfig">
+			P_FT_界面公共信息查询
+		</proceduce>
+
+		<proceduce name="menuconfig">
+			P_FT_findMenuByUserID 
+		</proceduce>
+
+		<proceduce name="viewconfig">
+			P_FT_根据菜单ID获取窗口信息_Interface
+		</proceduce>
+
+		<proceduce name="viewconfig0">
+			P_FT_根据菜单ID获取窗口信息_Interface
+		</proceduce>
+
+		<proceduce name="alterconfig">
+			P_根据ID获取弹出窗口信息
+		</proceduce>
+
+		<proceduce name="lineBack">
+			p_火炬回放更新当前点坐标
+		</proceduce>
+
+		<proceduce name="weather">
+			P_FT_天气情况
+		</proceduce>
+
+		<proceduce name="drawRectCircle">
+			P_获取框选数据
+		</proceduce>
+
+
+	</proceduces>
+
+	<props>
+		<prop name="currentLocation">30</prop>
+		<prop name="playBack">30</prop>
+		<prop name="mapSetCenterzoomLevel">8</prop>
+		<prop name="serachURL">DataServer/AjaxForSearch.aspx</prop>
+		<prop name="photoTimeStep">3</prop>
+		
+		<prop name="userId">9</prop>
+	</props>
+
+	<lines>
+		<line name="people">671</line>
+	</lines>
+	<openFlowLength>7</openFlowLength>
+	<playBackUpdateCenter>300</playBackUpdateCenter>
+	<ui>
+		<menu1>
+			<left></left>
+			<right></right>
+			<bottom>
+				<lBtn x="" y=""></lBtn>
+				<rBtn x="" y=""></rBtn>
+			</bottom>
+		</menu1>
+		<menu2>
+			<left></left>
+			<right></right>
+		</menu2>
+
+		<openFlow>
+			<layout>0</layout>
+			<gap>600</gap>
+			<fieldOfView>45</fieldOfView>
+			<focalLength>1000</focalLength>
+		</openFlow>
+	</ui>
+</config>

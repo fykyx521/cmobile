@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					   xmlns:s="library://ns.adobe.com/flex/spark" 
+					   xmlns:mx="library://ns.adobe.com/flex/mx" layout="{vlayout}">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+		<s:VerticalLayout id="vlayout">
+			
+		</s:VerticalLayout>
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			private var socket:ServerSocket;
+			private var sockets:Array=[];
+			private function init(e:Event):void
+			{
+				
+				try
+				{
+					jstate.text="开始监听";
+					
+					if(!socket)
+					{
+						socket=new ServerSocket();
+						if(socket.bound)
+						{
+							socket.close();
+							socket=new ServerSocket();
+						}
+						socket.addEventListener(ServerSocketConnectEvent.CONNECT,connect);
+						socket.bind(int(this.port.text),this.ip.text);
+						socket.listen();
+						if(socket.listening)
+						{
+							jstate.text="监听中...";
+						}else
+						{
+							jstate.text="监听失败...";
+						}
+					}
+					
+				}catch(e1:Error)
+				{
+					jstate.text=e1.message;
+				}
+				
+			}
+			private function connect(e:ServerSocketConnectEvent):void
+			{
+				var socket:Socket=e.socket;
+				socket.addEventListener(ProgressEvent.SOCKET_DATA,dataHandler);
+				sockets.push(socket);
+				jstate.text="连接数"+sockets.length;
+			}
+			private function dataHandler(e:ProgressEvent):void
+			{
+				var socket:Socket=e.target as Socket;
+				if(socket)
+				{
+					var obj:*=socket.readObject();
+					txt.appendText(obj.type);
+					for(var i:int=0;i<this.sockets.length;i++)
+					{
+						var sc:Socket=this.sockets[i];
+						if(sc.connected)
+						{
+							sc.writeObject(obj);
+							sc.flush();
+							//txt.appendText(str);
+						}
+					}
+					
+					
+				}
+//				var socket:Socket=e.target as Socket;
+//				var str:String=socket.readUTFBytes(socket.bytesAvailable);
+//				
+//				line(str);
+			}
+			private function line(str:String):void
+			{
+			
+				for(var i:int=0;i<this.sockets.length;i++)
+				{
+					var sc:Socket=this.sockets[i];
+					if(sc.connected)
+					{
+						sc.writeUTFBytes(str);
+						sc.flush();
+						//txt.appendText(str);
+					}
+				}
+				
+			}
+		]]>
+	</fx:Script>
+	<s:HGroup id="hv">
+		 <s:Label text="ip"/>
+		 <s:TextInput id="ip" text="192.168.68.41"/>
+		<s:Label text="端口"/>
+		<s:TextInput id="port" text="11100"/>
+		<s:Button label="开启服务" id="btn" click="init(event)"/>
+		<s:Label text="监听状态"/>
+		<mx:Text text="未监听" id="jstate"/>
+	</s:HGroup>
+	<s:TextArea id="txt" width="100%" height="100%">
+		
+	</s:TextArea>
+	
+</s:WindowedApplication>

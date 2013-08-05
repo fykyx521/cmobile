@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="850" height="400" creationComplete="Init(event)">
+	<s:layout>
+		<s:BasicLayout/>
+	</s:layout>
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import JTWC.Services.WeatherServices;
+			
+			import mx.events.FlexEvent;
+			
+			protected function Init(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				var service:WeatherServices=new WeatherServices();
+				service.getResultXml(WeatherConfig.getWeatherYJ,WeatherResul);
+			}
+			
+			private function WeatherResul(resulXML:XML):void
+			{
+				var tmpXML:XML=resulXML.data[0];
+				txt_lx.text=tmpXML.attribute("alarmType").toString();
+				txt_sj.text="发布时间："+tmpXML.attribute("alarmDate").toString();
+				txt_qy.text="发布区域："+tmpXML.attribute("alarmArea").toString();
+				txt_ms.text="      "+tmpXML.attribute("alarmInfo").toString();
+			}
+			
+		]]>
+	</fx:Script>
+	<s:Rect height="100%" width="100%">
+		<s:fill>
+			<s:BitmapFill source="@Embed('../assets/qxyj.png')"/>
+		</s:fill>
+	</s:Rect>
+	
+	<s:Label x="131" y="84" width="330" height="30" fontSize="30" textAlign="right" color="#FFFFFF" text="当前生效预警信号:"/>
+	<s:Label id="txt_lx" x="469" y="85" fontSize="28" height="30" color="#ffdd00" text="--"/>
+	<s:Label id="txt_ms" x="25" y="148" width="802"  fontSize="24" height="165" color="#FFFFFF" text="      将非可（例如服务、值对象）放在此处将非可视元素（例如服务、值对象）放在此处将非可视元素（例如服务、值对象）放在此处将非可视元素（例如服务、值对象）放在此处将非可视元素（例如服务、值对象）放在此处将非可视元素（例如服务、值对象）放在此处"/>
+	<s:Label id="txt_sj" x="25" y="346" width="440"  fontSize="24" color="#FFFFFF" height="26" text="发布时间：--"/>
+	<s:Label id="txt_qy" x="473" y="346" width="344"  fontSize="24" color="#FFFFFF" height="26" text="发布区域：--"/>
+</s:Group>

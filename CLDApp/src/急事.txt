@@ -1,0 +1,5 @@
+YCConfig.as 115行 cssFolder 要改回来
+MenuGroup 134  imgPath="assets/test/zdj.jpg";
+     menu2
+     menu3                 imgPath="assets/test/zdj.jpg";
+MainWiw 148    

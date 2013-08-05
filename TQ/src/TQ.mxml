@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" applicationComplete="Init()"
+			   minHeight="600" width="1920" height="1080">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import JTWC.JTWCWeather;
+			import JTWC.QXYJWeather;
+			import JTWC.TFLJWeather;
+			
+			import mx.controls.Alert;
+			import mx.managers.FocusManager;
+			import mx.managers.SystemManager;
+			import mx.preloaders.DownloadProgressBar;
+			import mx.preloaders.Preloader;
+			private function Init():void
+			{
+				var jw:JTWCWeather=new JTWCWeather();
+				TQComponent.addChild(jw);
+				jw.x=15;
+				jw.y=15;
+				
+				var yj:QXYJWeather=new QXYJWeather();
+				TQComponent.addChild(yj);
+				yj.x=15;
+				yj.y=635;
+				
+				var tf:TFLJWeather=new TFLJWeather();
+				TQComponent.addChild(tf);
+				tf.x=875;
+				tf.y=15;
+			}
+		]]>
+	</fx:Script>
+	<s:Rect height="100%" width="100%">
+		<s:fill>
+			<s:SolidColor color="#053563"/>
+		</s:fill>
+	</s:Rect>
+	<mx:UIComponent id="TQComponent">
+		
+	</mx:UIComponent>
+</s:Application>

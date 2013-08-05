@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:JTWC="JTWC.*"
+		 width="850" height="610" creationComplete="Init(event)">
+	<s:layout>
+		<s:BasicLayout/>
+	</s:layout>
+	
+	<fx:Style>
+		@namespace s "library://ns.adobe.com/flex/spark";
+		@namespace mx "library://ns.adobe.com/flex/mx";
+		
+		s|Label.labelStyle
+		{
+			color: #C63535;	
+			fontFamily: "msyh";
+			fontSize: 36;
+		}
+		
+	</fx:Style>
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import JTWC.Services.WeatherServices;
+			
+			import com.adobe.serializers.xml.XMLDecoder;
+			
+			import mx.controls.Alert;
+			import mx.controls.DateField;
+			import mx.events.FlexEvent;
+			import mx.formatters.DateFormatter;
+			protected function Init(event:FlexEvent):void
+			{
+				GetWeather();
+			}
+			
+			private function GetWeather():void
+			{
+				var service:WeatherServices=new WeatherServices();
+				service.getResultXml(WeatherConfig.getWeatherUrl,WeatherResul);
+			}
+			
+			private function ParserWeek(d:Number):String
+			{
+				if(d>=7)
+				{
+					d-=7;
+				}
+				switch(d)
+				{
+					case 0:
+					{
+						return "周日";
+					}
+					case 1:
+					{
+						return "周一";
+					}
+					case 2:
+					{
+						return "周二";
+					}
+					case 3:
+					{
+						return "周三";
+					}
+					case 4:
+					{
+						return "周四";
+					}
+					case 5:
+					{
+						return "周五";
+					}
+					case 6:
+					{
+						return "周六";
+					}
+				}
+				return "--";
+			}
+			
+			private function CreateDate(myDate:Date,d:Number):String
+			{
+				var resD:String="--  --";
+				myDate.setDate(myDate.getDate()+d);
+				resD=DateField.dateToString(myDate,"MM/DD ");
+				resD+= ParserWeek(myDate.getDay());
+				return resD;
+			}
+			
+			private function WeatherResul(resulXML:XML):void
+			{
+				var tmpXML:XML=resulXML.data[0];
+				//获取当前日期
+				var strToday:String = tmpXML.attribute("datetime").toString();
+				var mydate:Date = DateFormatter.parseDateString(strToday);
+				strToday=mydate .fullYearUTC.toString()+""+mydate..toString()+""+mydate .fullYearUTC.toString()+"";
+				strToday=DateField.dateToString(mydate,"(YYYY年MM月DD日 ");
+				strToday+=mydate.getHours();
+				strToday+="时";
+				strToday+=mydate.getMinutes();
+				strToday+="分更新）";
+				nowData.text=strToday;
+				
+				
+				var w:String=DateField.dateToString(mydate,"MM/DD  ");
+				w+=ParserWeek(mydate.getDay());
+				nowWeek.text=w;
+				
+				nowWeatherImg.source="assets/weather/"+WeatherConfig.GetWeatherImage(tmpXML.attribute("weather1").toString());
+				weather_t.text=tmpXML.attribute("weather1").toString()+"  "+tmpXML.attribute("temp1").toString();
+				
+				
+				
+				wind_humidity.text=tmpXML.attribute("wind1").toString()+"；相对湿度"+tmpXML.attribute("tempF1").toString().replace(new RegExp("[℉]", "g"),"%");
+				
+				
+				
+				
+				var fw1:futureWeather=new futureWeather();
+				fw1.InitWeather(tmpXML.attribute("weather2").toString(),CreateDate(mydate,1),tmpXML.attribute("temp2").toString());
+				hBox.addChild(fw1);
+				
+				var fw2:futureWeather=new futureWeather();
+				fw2.InitWeather(tmpXML.attribute("weather3").toString(),CreateDate(mydate,1),tmpXML.attribute("temp3").toString());
+				hBox.addChild(fw2);
+				
+				var fw3:futureWeather=new futureWeather();
+				fw3.InitWeather(tmpXML.attribute("weather4").toString(),CreateDate(mydate,1),tmpXML.attribute("temp4").toString());
+				hBox.addChild(fw3);
+				
+				var fw4:futureWeather=new futureWeather();
+				fw4.InitWeather(tmpXML.attribute("weather5").toString(),CreateDate(mydate,1),tmpXML.attribute("temp5").toString());
+				hBox.addChild(fw4);
+				
+				
+				lab_wd.text=tmpXML.attribute("temp1").toString();
+				lab_fx.text=tmpXML.attribute("fx1").toString();
+				lab_fl.text=tmpXML.attribute("fl1").toString();
+				lab_fs.text=tmpXML.attribute("wind1").toString();
+				//lab_qy.text=tmpXML.attribute("temp1").toString();
+				lab_xdsd.text=tmpXML.attribute("tempF1").toString().replace(new RegExp("[℉]", "g"),"%");
+			}
+			
+		]]>
+	</fx:Script>
+	<s:Rect height="100%" width="100%">
+		<s:fill>
+			<s:BitmapFill source="@Embed('../assets/tqsk.png')"/>
+		</s:fill>
+	</s:Rect>
+	<s:Label styleName="labelStyle" x="47" y="72" width="223" color="#FFFFFF" fontSize="30" text="深圳市" textAlign="right"/>
+	<s:Label id="nowData" x="278" y="78" width="414" color="#ffdd00" styleName="fontStyle" fontSize="20" text="--" textAlign="left"/>
+	<s:Label id="nowWeek" x="34" y="120" width="201" fontSize="30" height="30" text="--  --" color="#FFFFFF"/>
+	<s:Image id="nowWeatherImg" source="assets/weather/Yahoo_Weather_011.png" x="201" y="154" width="263" height="180"/>
+	<mx:HBox id="hBox" x="8" y="441" width="568" height="140">
+	</mx:HBox>
+	<s:Label id="weather_t" x="114" y="342" width="440" height="30" fontSize="30" textAlign="center" color="#ffffff" text="--  --"/>
+	<s:Label id="wind_humidity" x="115" y="384" width="440" height="30" fontSize="18" textAlign="center" color="#ffffff" text="东风2-3级；相对湿度70%-80%"/>
+	
+	
+	<s:Label x="564" y="129" width="267" height="34" color="#FFFFFF" fontSize="30" textAlign="center" text="今日详细信息"/>
+	
+	<s:Label color="#FFFFFF" x="581" y="193" fontSize="22" width="115" height="26" text="当前温度：" textAlign="right"/>
+	<s:Label id="lab_wd" x="693" y="193" width="147" height="26" color="#ffdd00" fontSize="22" lineHeight="26" text="--"/>
+	
+	<s:Label color="#FFFFFF" x="581" y="237" fontSize="22" width="115" height="26" text="风向：" textAlign="right"/>
+	<s:Label id="lab_fx" x="693" y="237" width="147" height="26" color="#ffdd00" fontSize="22" lineHeight="26" text="--"/>
+	
+	<s:Label color="#FFFFFF" x="581" y="280" fontSize="22" width="115" height="26" text="风力：" textAlign="right"/>
+	<s:Label id="lab_fl" x="693" y="280" width="147" height="26" color="#ffdd00" fontSize="22" lineHeight="26" text="--"/>
+	
+	<s:Label color="#FFFFFF" x="581" y="319" fontSize="22" width="115" height="26" text="风速：" textAlign="right"/>
+	<s:Label id="lab_fs" x="693" y="319" width="147" height="26" color="#ffdd00" fontSize="22" lineHeight="26" text="--"/>
+	
+	<s:Label color="#FFFFFF" x="581" y="369" fontSize="22" width="115" height="26" text="气压：" textAlign="right"/>
+	<s:Label id="lab_qy" x="693" y="369" width="147" height="26" color="#ffdd00" fontSize="22" lineHeight="26" text="--"/>
+	
+	<s:Label color="#FFFFFF" x="581" y="414" fontSize="22" width="115" height="26" text="相对湿度：" textAlign="right"/>
+	<s:Label id="lab_xdsd" x="693" y="414" width="147" height="26" color="#ffdd00" fontSize="22" lineHeight="26" text="--"/>
+	
+	
+	
+	
+	
+	
+	
+</s:Group>

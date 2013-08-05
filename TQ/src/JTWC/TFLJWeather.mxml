@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="1000" height="1020" creationComplete="Init(event)" xmlns:styles="com.adobe.fiber.styles.*">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+		<s:HTTPService id="weatherList" resultFormat="e4x" result="weatherList_resultHandler(event)">
+			
+		</s:HTTPService>
+		
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import JTWC.Services.WeatherServices;
+			
+			import com.adobe.serializers.json.JSONDecoder;
+			
+			import mx.collections.ArrayCollection;
+			import mx.collections.XMLListCollection;
+			import mx.controls.Alert;
+			import mx.controls.DateField;
+			import mx.events.FlexEvent;
+			import mx.formatters.DateFormatter;
+			import mx.rpc.events.ResultEvent;
+			private var g:Graphics;
+			private var _x:Number=975/21.5;//105.5-127.0
+			private var _y:Number=868/17.4;//31.8-14.4
+			private var arrLJ:Array;
+			private var myColor:uint=0xFFDD00;
+			private var ImgX:Number=0;
+			private var ImgY:Number=0;
+			
+			protected function Init(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				g=this.tflj.graphics;
+				g.clear();
+				//DraeLine();
+				GetWeatherTF();
+				weatherList.url=WeatherConfig.getWeatherList;
+				weatherList.send();
+			}
+			
+			private function GetWeatherTF():void
+			{
+				var service:WeatherServices=new WeatherServices();
+				service.getResultXml(WeatherConfig.getWeatherTF,WeatherResulTF);
+			}
+			
+			private function WeatherResulTF(resulXML:XML):void
+			{
+				var tmpXML:XML=resulXML.data[0];
+				
+				//var myDate:Date=new Date(tmpXML.attribute("datetime").toString());
+				//lab_dwsj.text=DateField.dateToString(myDate,"YYYY-MM-DD ");
+				//lab_dwsj.text+=myDate.getHours()+"时";
+				
+				lab_bh.text=tmpXML.attribute("code").toString();
+				lab_mc.text=tmpXML.attribute("name").toString().split("(")[0];
+				lab_bw.text=tmpXML.attribute("wd").toString()+"度";
+				lab_dj.text=tmpXML.attribute("jd").toString()+"度";
+				lab_zxqy.text=tmpXML.attribute("qy").toString()+"帕";
+				lab_zxfs.text=tmpXML.attribute("fs").toString()+"米/秒";
+				//lab_qd.text=tmpXML.attribute("").toString();
+				//lab_jlsz.text="";
+				
+				
+				ImgX=ConvertX(tmpXML.attribute("jd").toString());
+				ImgY=ConvertY(tmpXML.attribute("wd").toString());
+				
+				var jd:JSONDecoder = new JSONDecoder();
+				//写入路径点
+				arrLJ= ArrayCollection(jd.decode(tmpXML.attribute("lj").toString())).toArray()
+				DrawLine();
+				LoadImage(new Point(ImgX,ImgY))
+			}
+			
+			private function line(pointStrat:Point,pointEnd:Point):void{
+				g.lineStyle(3, myColor, 1.0, false, LineScaleMode.VERTICAL, CapsStyle.NONE, JointStyle.MITER, 100);
+				g.moveTo(pointStrat.x,pointStrat.y);
+				g.lineTo(pointEnd.x, pointEnd.y);
+			}
+			
+			//画台风路线
+			private function DrawLine():void
+			{
+				var oldPoint:Point=new Point(ConvertX(arrLJ[0][0]),ConvertY(arrLJ[0][1]));
+				var tmpPoint:Point;
+				for(var i:Number=1;i<arrLJ.length;i++)
+				{
+					tmpPoint=new Point(ConvertX(arrLJ[i][0]),ConvertY(arrLJ[i][1]));
+					if(tmpPoint.x==ImgX&&tmpPoint.y==ImgY)//改变线条颜色
+					{
+						myColor=0x339999;
+					}
+					line(oldPoint,tmpPoint);
+					oldPoint=tmpPoint;
+				}
+			}
+			
+			private function ConvertX(x:Number):Number
+			{
+				var newX:Number=(x-105)*_x;
+				return newX;
+			}
+			
+			private function ConvertY(y:Number):Number
+			{
+				var newY:Number=868-(y-14.4)*_y;
+				return newY;
+			}
+			
+			private function LoadImage(CenterPoint:Point):void
+			{
+				TFImg.source="assets/tf.png";
+				TFImg.y=CenterPoint.y-45;
+				TFImg.x=CenterPoint.x-45;
+				TFImg.visible=true;
+			}
+			
+			protected function weatherList_resultHandler(event:ResultEvent):void
+			{
+				tqList.dataProvider=new XMLListCollection(XML(event.result).data);
+				
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Style>
+		@namespace s "library://ns.adobe.com/flex/spark";
+		@namespace mx "library://ns.adobe.com/flex/mx";
+		@namespace styles "com.adobe.fiber.styles.*";
+		.tqList
+		{
+			
+			borderColor:#00ffff;
+			color:#ffffff;
+			contentBackgroundAlpha:0;
+			contentBackgroundColor:#063B6D;
+			downColor:#063B6D;
+			rollOverColor:#000000;
+			selectionColor:#063B6D;	
+
+		}
+		s|Scroller
+		{
+			color:#063B6D;	
+		}
+		
+	</fx:Style>
+	<s:Rect x="0" y="0" width="100%" height="100%">
+		<s:fill>
+			<s:BitmapFill source="@Embed('../assets/tflj.png')"/>
+		</s:fill>
+	</s:Rect>
+	<!--mx:Box id="tflj" x="24" y="129" height="868" width="975">
+	</mx:Box-->
+	<s:Group id="tflj" x="25" y="130" height="868" width="975">
+		<s:Image id="TFImg" visible="false"/>
+		<s:List id="tqList" x="10" y="645" height="213" borderVisible="true" enabled="true"
+				labelField="@title" styleName="tqList"></s:List>
+	</s:Group>
+	<s:Group x="677" y="760" width="323" height="260">
+		
+		<s:Label x="6" y="17" width="120" textAlign="right" color="#FFFFFF" fontSize="20" text="定位时间："/>
+		<s:Label id="lab_dwsj" x="125" y="18" fontSize="20" color="#ffdd00" text="--"/>
+		
+		<s:Label x="6" y="43" width="120" textAlign="right" color="#FFFFFF" fontSize="20" text="编号："/>
+		<s:Label id="lab_bh" x="125" y="42" fontSize="20" color="#ffdd00" text="--"/>
+		
+		<s:Label x="6" y="69" width="120" textAlign="right" color="#FFFFFF" fontSize="20" text="名称："/>
+		<s:Label id="lab_mc" x="125" y="68" fontSize="20" color="#ffdd00" text="--"/>
+		
+		<s:Label x="6" y="95" width="120" textAlign="right" color="#FFFFFF" fontSize="20" text="北纬："/>
+		<s:Label id="lab_bw" x="125" y="96" fontSize="20" color="#ffdd00" text="--"/>
+		
+		<s:Label x="6" y="121" width="120" textAlign="right" color="#FFFFFF" fontSize="20" text="东经："/>
+		<s:Label id="lab_dj" x="125" y="123" fontSize="20" color="#ffdd00" text="--"/>
+		
+		<s:Label x="6" y="147" width="120" textAlign="right" color="#FFFFFF" fontSize="20" text="中心气压："/>
+		<s:Label id="lab_zxqy" x="125" y="148" fontSize="20" color="#ffdd00" text="--"/>
+		
+		<s:Label x="6" y="173" width="120" textAlign="right" color="#FFFFFF" fontSize="20" text="中心风速："/>
+		<s:Label id="lab_zxfs" x="125" y="172" fontSize="20" color="#ffdd00" text="--"/>
+		
+		<s:Label x="6" y="199" width="120" textAlign="right" color="#FFFFFF" fontSize="20" text="强度："/>
+		<s:Label id="lab_qd" x="125" y="199" fontSize="20" color="#ffdd00" text="--"/>
+		
+		<s:Label x="6" y="225" width="120" textAlign="right" color="#FFFFFF" fontSize="20" text="距离深圳："/>
+		<s:Label id="lab_jlsz" x="125" y="226" fontSize="20" color="#ffdd00" text="--"/>
+		
+	</s:Group>
+</s:Group>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<flexLibProperties includeAllClasses="false" useMultiPlatformConfig="false" version="3">
+  <includeClasses>
+    <classEntry path="com.careland.viewer.CLDDOCBASE"/>
+    <classEntry path="com.careland.viewer.CLDDocLoader"/>
+    <classEntry path="com.careland.viewer.CLDDocView"/>
+    <classEntry path="com.careland.viewer.CLDScrollDocView"/>
+    <classEntry path="com.careland.viewer.CLDTest"/>
+    <classEntry path="com.careland.viewer.CLDTouchDocView"/>
+    <classEntry path="com.careland.viewer.ShapeMarker"/>
+    <classEntry path="com.careland.viewer.events.CLDSwfEvent"/>
+    <classEntry path="com.careland.viewer.model.CLDImage"/>
+    <classEntry path="com.careland.viewer.model.DOCData"/>
+    <classEntry path="com.careland.viewer.util.FPS"/>
+    <classEntry path="com.careland.viewer.util.LoaderManager"/>
+  </includeClasses>
+  <includeResources/>
+  <namespaceManifests/>
+</flexLibProperties>

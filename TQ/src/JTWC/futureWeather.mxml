@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="132" height="140">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			public function InitWeather(n:String,d:String,temp:String):void
+			{
+				iWeather.source="assets/weather/"+WeatherConfig.GetWeatherImage(n);
+				lab_date.text=d;
+				lab_temp.text=temp;
+			}
+		]]>
+	</fx:Script>
+	<s:Label id="lab_date" x="0" y="1" width="100%" color="#ffffff" fontSize="16" height="20" text="--  --"
+			 textAlign="center"/>
+	<s:Image id="iWeather" x="5" y="28" width="123" height="84"
+			 source="assets/weather/Yahoo_Weather_011.png"/>
+	<s:Label id="lab_temp" x="0" y="119" width="100%" color="#ffffff" fontSize="16" height="20" text="--" textAlign="center"/>
+</s:Group>
